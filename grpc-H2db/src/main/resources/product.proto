@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.grpc.ej5";
+option java_outer_classname = "ProductProto";
+
+service ProductService {
+
+  // 1. UNARY: Obtener producto por ID
+  rpc GetProductById (ProductIdRequest) returns (ProductResponse);
+
+  // 2. SERVER STREAMING: Productos más baratos que un precio
+  rpc StreamCheaperProducts (PriceRequest) returns (stream ProductResponse);
+
+  // 3. CLIENT STREAMING: Insertar varios productos
+  rpc InsertProducts (stream NewProductRequest) returns (InsertSummary);
+
+  // 4. BIDIRECTIONAL STREAMING: Consultas dinámicas de precio
+  rpc LivePriceQuery (stream PriceRequest) returns (stream ProductResponse);
+}
+
+message ProductIdRequest {
+  int32 id = 1;
+}
+
+message PriceRequest {
+  double maxPrice = 1;
+}
+
+message ProductResponse {
+  int32 id = 1;
+  string name = 2;
+  double price = 3;
+}
+
+message NewProductRequest {
+  string name = 1;
+  double price = 2;
+}
+
+message InsertSummary {
+  int32 insertedCount = 1;
+}

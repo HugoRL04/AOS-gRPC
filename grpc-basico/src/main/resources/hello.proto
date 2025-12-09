@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.grpc.ej1";
+option java_outer_classname = "HelloProto";
+
+service HelloService {
+
+  // UNARY
+  rpc unaryHello (HelloRequest) returns (HelloResponse);
+
+  // SERVER STREAMING
+  rpc serverStreamHello (HelloRequest) returns (stream HelloResponse);
+
+  // CLIENT STREAMING
+  rpc clientStreamHello (stream HelloRequest) returns (HelloResponse);
+
+  // BIDIRECTIONAL STREAMING
+  rpc bidirectionalHello (stream HelloRequest) returns (stream HelloResponse);
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string message = 1;
+}
