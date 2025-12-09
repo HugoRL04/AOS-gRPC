@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.grpc.ej3";
+option java_outer_classname = "AskProto";
+
+//  SERVICIO 1 (Middle)
+service AskService {
+  rpc preguntar (Pregunta) returns (Respuesta);
+}
+
+//  SERVICIO 2 (Final)
+service ResponseService {
+  rpc responder (Pregunta) returns (Respuesta);
+}
+
+message Pregunta {
+  string mensaje = 1;
+}
+
+message Respuesta {
+  string mensaje = 1;
+}
