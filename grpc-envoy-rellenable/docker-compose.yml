@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  # -------------------------------------------------------------
+  # 2. Envoy Proxy (Traductor REST <-> gRPC)
+  # -------------------------------------------------------------
+  envoy:
+    image: envoyproxy/envoy:v1.26-latest
+    container_name: envoy-proxy
+    ports:
+      - "8080:8080"               # Puerto PÚBLICO para peticiones HTTP/REST
+      - "9901:9901"               # Interfaz de administración de Envoy
+    volumes:
+      # Montamos la configuración
+      - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
+      # Montamos el descriptor binario (¡CRÍTICO para la traducción!)
+      - ./envoy/proto.pb:/etc/envoy/proto.pb
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Asegura que Linux/Windows resuelvan bien la IP

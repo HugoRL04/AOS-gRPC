@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package ecommerce;
+
+import "google/api/annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.ejemplo.ecommerce";
+
+service OrderService {
+
+  // 1. CREAR: Mapea un POST HTTP. El body "*" significa que todo el JSON 
+  // entrante se intentará mapear al mensaje CreateOrderRequest.
+  rpc CreateOrder (CreateOrderRequest) returns (OrderResponse) {
+    option (google.api.http) = {
+      post: "/v1/orders"
+      body: "*"
+    };
+  }
+
+  // 2. CONSULTAR: Mapea un GET HTTP con parámetro de ruta (path parameter).
+  rpc GetOrder (GetOrderRequest) returns (OrderResponse) {
+    option (google.api.http) = {
+      get: "/v1/orders/{order_id}"
+    };
+  }
+}
+
+// -- Mensajes de Datos --
+
+enum OrderStatus {
+  PENDING = 0;
+  SHIPPED = 1;
+  DELIVERED = 2;
+  CANCELLED = 3;
+}
+
+message OrderItem {
+  string product_id = 1;
+  int32 quantity = 2;
+  double price = 3;
+}
+
+message CreateOrderRequest {
+  string customer_id = 1;
+  repeated OrderItem items = 2; // Lista de objetos
+}
+
+message GetOrderRequest {
+  string order_id = 1;
+}
+
+message OrderResponse {
+  string order_id = 1;
+  string customer_id = 2;
+  repeated OrderItem items = 3;
+  OrderStatus status = 4; // Enum
+  double total_amount = 5;
+}
